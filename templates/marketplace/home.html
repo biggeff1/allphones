@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block title %}AllPhones — Annonces{% endblock %}{% block content %}
+<h1>Téléphones et ordinateurs de seconde main</h1><p>Les biens sont proposés par AllPhones. Les coordonnées des déposants restent confidentielles.</p>
+<div class="grid">{% for listing in listings %}<article class="card"><small>{{ listing.get_category_display }} · {{ listing.get_condition_display }}</small><h2>{{ listing.brand }} {{ listing.model }}</h2><p>{{ listing.description|truncatechars:150 }}</p><p><strong>{{ listing.public_price }} {{ listing.currency }}</strong></p><p>{{ listing.location }}</p><a class="btn" href="{% url 'listing_detail' listing.pk %}">Voir l'annonce</a></article>{empty}<p>Aucune annonce disponible pour le moment.</p>{% endfor %}</div>
+{% endblock %}
