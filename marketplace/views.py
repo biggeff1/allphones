@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
-from .forms import InterestRequestForm
+from .forms import DepositRequestForm, InterestRequestForm
 from .models import Listing
 
 def home(request):
@@ -16,11 +16,18 @@ def interest(request, pk):
     if request.method == "POST":
         form = InterestRequestForm(request.POST)
         if form.is_valid():
-            obj = form.save(commit=False)
-            obj.listing = listing
-            obj.save()
+            obj = form.save(commit=False); obj.listing = listing; obj.save()
             messages.success(request, "Votre demande a été reçue. AllPhones vous contactera pour organiser la suite.")
             return redirect("listing_detail", pk=listing.pk)
-    else:
-        form = InterestRequestForm()
+    else: form = InterestRequestForm()
     return render(request, "marketplace/interest.html", {"listing": listing, "form": form})
+
+def deposit(request):
+    if request.method == "POST":
+        form = DepositRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Votre proposition a été envoyée à AllPhones. L'agence vous contactera après vérification.")
+            return redirect("home")
+    else: form = DepositRequestForm()
+    return render(request, "marketplace/deposit.html", {"form": form})
