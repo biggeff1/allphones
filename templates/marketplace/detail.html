@@ -1,0 +1,3 @@
+{% extends "base.html" %}{% block title %}{{ listing.brand }} {{ listing.model }} — AllPhones{% endblock %}{% block content %}
+<div class="card"><small>{{ listing.get_category_display }} · {{ listing.get_condition_display }}</small><h1>{{ listing.brand }} {{ listing.model }}</h1><p>{{ listing.description }}</p><h2>{{ listing.public_price }} {{ listing.currency }}</h2><p>📍 {{ listing.location }}</p><hr><p><strong>Important :</strong> le déposant et l'acheteur ne reçoivent jamais les coordonnées l'un de l'autre. AllPhones organise et encadre la rencontre dans ses bureaux.</p><a class="btn" href="{% url 'interest' listing.pk %}">Je suis intéressé</a></div>
+{% endblock %}
