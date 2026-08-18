@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import AgencyMeeting, InterestRequest, Listing
+from .models import AgencyMeeting, DepositRequest, InterestRequest, Listing
 
 @admin.register(Listing)
 class ListingAdmin(admin.ModelAdmin):
@@ -7,6 +7,13 @@ class ListingAdmin(admin.ModelAdmin):
     list_filter = ("category", "condition", "status")
     search_fields = ("title", "brand", "model", "seller_reference")
     readonly_fields = ("public_price", "created_at", "updated_at")
+
+@admin.register(DepositRequest)
+class DepositRequestAdmin(admin.ModelAdmin):
+    list_display = ("id", "brand", "model", "full_name", "phone", "expected_price", "status", "created_at")
+    list_filter = ("status", "category", "condition")
+    search_fields = ("full_name", "phone", "brand", "model")
+    readonly_fields = ("created_at",)
 
 @admin.register(InterestRequest)
 class InterestRequestAdmin(admin.ModelAdmin):
