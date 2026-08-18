@@ -1,12 +1,21 @@
 from django.contrib import admin
 from .models import AgencyMeeting, DepositRequest, InterestRequest, Listing
 
+@admin.action(description="Valider et publier les annonces sélectionnées")
+def approve_listings(modeladmin, request, queryset):
+    queryset.update(status="published")
+
+@admin.action(description="Rejeter / remettre en brouillon")
+def reject_listings(modeladmin, request, queryset):
+    queryset.update(status="draft")
+
 @admin.register(Listing)
 class ListingAdmin(admin.ModelAdmin):
     list_display = ("title", "category", "brand", "model", "acquisition_price", "margin", "public_price", "status", "created_at")
     list_filter = ("category", "condition", "status")
     search_fields = ("title", "brand", "model", "seller_reference")
     readonly_fields = ("public_price", "created_at", "updated_at")
+    actions = [approve_listings, reject_listings]
     fieldsets = (("Annonce", {"fields": ("title", "category", "brand", "model", "condition", "description", "location", "status")}), ("Finances internes", {"fields": ("seller_reference", "acquisition_price", "margin", "public_price", "currency")}))
 
 @admin.register(DepositRequest)
