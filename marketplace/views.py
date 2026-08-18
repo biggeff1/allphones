@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import DepositRequestForm, InterestRequestForm
 from .models import Listing
+from .public_forms import PublicListingForm
 
 def home(request):
     listings = Listing.objects.filter(status="published").order_by("-created_at")
@@ -31,3 +32,18 @@ def deposit(request):
             return redirect("home")
     else: form = DepositRequestForm()
     return render(request, "marketplace/deposit.html", {"form": form})
+
+def create_listing(request):
+    if request.method == "POST":
+        form = PublicListingForm(request.POST)
+        if form.is_valid():
+            listing = form.save(commit=False)
+            listing.status = "draft"
+            listing.acquisition_price = 0
+            listing.margin = 0
+            listing.save()
+            messages.success(request, "Votre annonce a été envoyée. Elle sera visible uniquement après validation par AllPhones.")
+            return redirect("home")
+    else:
+        form = PublicListingForm()
+    return render(request, "marketplace/create_listing.html", {"form": form})
