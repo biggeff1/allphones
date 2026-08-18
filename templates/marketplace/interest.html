@@ -1,0 +1,3 @@
+{% extends "base.html" %}{% block title %}Demande — AllPhones{% endblock %}{% block content %}
+<div class="card"><h1>Demande d'intérêt</h1><p>Vous demandez à AllPhones d'organiser la mise en relation physique. Vos coordonnées sont transmises uniquement à l'agence.</p><form method="post">{% csrf_token %}{{ form.as_p }}<p>En envoyant ce formulaire, vous acceptez que AllPhones vous contacte pour organiser la rencontre dans ses bureaux.</p><button class="btn" type="submit">Envoyer ma demande</button></form></div>
+{% endblock %}
