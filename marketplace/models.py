@@ -1,9 +1,11 @@
+from django.conf import settings
 from django.db import models
 
 class Listing(models.Model):
     CATEGORY_CHOICES = [("phone", "Téléphone"), ("computer", "Ordinateur")]
     CONDITION_CHOICES = [("used", "Seconde main"), ("refurbished", "Reconditionné")]
-    STATUS_CHOICES = [("draft", "Brouillon"), ("published", "Publié"), ("reserved", "Réservé"), ("sold", "Vendu")]
+    STATUS_CHOICES = [("draft", "En attente"), ("published", "Publié"), ("reserved", "Réservé"), ("sold", "Vendu")]
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="listings")
     title = models.CharField(max_length=180)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     brand = models.CharField(max_length=80)
@@ -11,7 +13,7 @@ class Listing(models.Model):
     condition = models.CharField(max_length=20, choices=CONDITION_CHOICES, default="used")
     description = models.TextField()
     seller_reference = models.CharField(max_length=120, blank=True, help_text="Référence interne; jamais affichée")
-    acquisition_price = models.DecimalField(max_digits=12, decimal_places=2, help_text="Prix convenu avec le déposant")
+    acquisition_price = models.DecimalField(max_digits=12, decimal_places=2, default=0, help_text="Prix convenu avec le déposant")
     margin = models.DecimalField(max_digits=12, decimal_places=2, default=0, help_text="Marge AllPhones")
     public_price = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     currency = models.CharField(max_length=3, default="USD")
@@ -26,6 +28,15 @@ class Listing(models.Model):
 
     def __str__(self):
         return f"{self.brand} {self.model} — {self.public_price} {self.currency}"
+
+class ListingImage(models.Model):
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="images")
+    image = models.ImageField(upload_to="listings/%Y/%m/")
+    is_primary = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Photo #{self.pk} — annonce #{self.listing_id}"
 
 class DepositRequest(models.Model):
     STATUS_CHOICES = [("new", "Nouvelle"), ("review", "En vérification"), ("accepted", "Acceptée"), ("rejected", "Refusée"), ("listed", "Annonce créée")]
