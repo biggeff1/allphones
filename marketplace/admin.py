@@ -3,10 +3,11 @@ from .models import AgencyMeeting, DepositRequest, InterestRequest, Listing
 
 @admin.register(Listing)
 class ListingAdmin(admin.ModelAdmin):
-    list_display = ("title", "category", "brand", "model", "public_price", "margin", "status", "created_at")
+    list_display = ("title", "category", "brand", "model", "acquisition_price", "margin", "public_price", "status", "created_at")
     list_filter = ("category", "condition", "status")
     search_fields = ("title", "brand", "model", "seller_reference")
     readonly_fields = ("public_price", "created_at", "updated_at")
+    fieldsets = (("Annonce", {"fields": ("title", "category", "brand", "model", "condition", "description", "location", "status")}), ("Finances internes", {"fields": ("seller_reference", "acquisition_price", "margin", "public_price", "currency")}))
 
 @admin.register(DepositRequest)
 class DepositRequestAdmin(admin.ModelAdmin):
@@ -17,7 +18,7 @@ class DepositRequestAdmin(admin.ModelAdmin):
 
 @admin.register(InterestRequest)
 class InterestRequestAdmin(admin.ModelAdmin):
-    list_display = ("id", "listing", "full_name", "phone", "status", "created_at")
+    list_display = ("id", "listing", "full_name", "phone", "status", "preferred_date", "preferred_time", "created_at")
     list_filter = ("status",)
     search_fields = ("full_name", "phone", "email")
     readonly_fields = ("created_at",)
