@@ -1,0 +1,3 @@
+{% extends "base.html" %}{% block title %}Déposer un bien — AllPhones{% endblock %}{% block content %}
+<div class="card"><h1>Proposer un téléphone ou ordinateur</h1><p>Vous transmettez vos informations à AllPhones. <strong>Vous ne publiez pas directement l'annonce.</strong> Après vérification et accord, l'agence crée l'annonce, fixe sa marge et gère toute la relation avec l'acheteur.</p><form method="post">{% csrf_token %}{{ form.as_p }}<p>AllPhones ne publiera jamais votre numéro ou votre identité sur l'annonce.</p><button class="btn" type="submit">Envoyer à AllPhones</button></form></div>
+{% endblock %}
